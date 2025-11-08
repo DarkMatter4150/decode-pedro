@@ -204,7 +204,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
             telemetry.update();
 
             shooter.setPower(SHOOTER_LONG_POWER);  // Long shot power (same as teleop X button)
-            sleep(4000); // Short delay for initial acceleration before RPM calc
+            sleep(3500); // Short delay for initial acceleration before RPM calc
             waitForTargetRPM();  // Wait for shooter to reach full speed (adjust as needed)
 
             // Feed artifact once RPM is stable
@@ -322,7 +322,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
             }
 
             // Safety timeout (max 3 seconds to reach speed)
-            if (rpmTimer.seconds() > 3.0) {
+            if (rpmTimer.seconds() > 6.0) {
                 telemetry.addData("Warning", "RPM timeout - feeding anyway");
                 telemetry.update();
                 break;

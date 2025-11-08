@@ -37,8 +37,8 @@ public class Tele extends OpMode {
         leftFeeder.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
     }
@@ -46,9 +46,10 @@ public class Tele extends OpMode {
     @Override
     public void loop() {
         rightFeeder.setPower(0);
-        double axial   = -gamepad1.left_stick_y;
-        double lateral =  gamepad1.left_stick_x;
-        double yaw     =  gamepad1.right_stick_x;
+        leftFeeder.setPower(0);
+        double axial   = gamepad1.left_stick_y;
+        double lateral = -gamepad1.left_stick_x;
+        double yaw     = gamepad1.right_stick_x;
         boolean longShot = false;
         boolean feedingActive = false;
         double shooterPower;
