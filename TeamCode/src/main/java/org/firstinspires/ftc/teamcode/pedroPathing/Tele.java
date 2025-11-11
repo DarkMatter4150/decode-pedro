@@ -37,8 +37,8 @@ public class Tele extends OpMode {
         leftFeeder.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
     }
@@ -46,36 +46,14 @@ public class Tele extends OpMode {
     @Override
     public void loop() {
         rightFeeder.setPower(0);
-        double axial   = -gamepad1.left_stick_y;
-        double lateral =  gamepad1.left_stick_x;
-        double yaw     =  gamepad1.right_stick_x;
+        leftFeeder.setPower(0);
+        double axial   =  gamepad1.left_stick_y;
+        double lateral = -gamepad1.left_stick_x;
+        double yaw     = -gamepad1.right_stick_x;
         boolean longShot = false;
         boolean feedingActive = false;
         double shooterPower;
 
-        // Left Bumper Init Feeders
-        if (gamepad1.left_bumper) {
-            feederTimer.reset(); // Start Timing
-            feedingActive = true;
-        }
-
-        // Run feeders while active and within duration
-        if (feedingActive && feederTimer.seconds() < FEEDING_DURATION) {
-            rightFeeder.setPower(1);
-            leftFeeder.setPower(1);
-
-        } else {
-            rightFeeder.setPower(0);
-            leftFeeder.setPower(0);
-            feedingActive = false;
-
-        }
-
-
-
-//        if (gamepad1.dpadUpWasPressed() {
-//            apriltag
-//        }
 
         double leftFrontPower  = axial + lateral + yaw;
         double rightFrontPower = axial - lateral - yaw;
@@ -97,6 +75,25 @@ public class Tele extends OpMode {
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
+
+        // Left Bumper Init Feeders
+        if (gamepad1.left_bumper) {
+            feederTimer.reset(); // Start Timing
+            feedingActive = true;
+        }
+
+        // Run feeders while active and within duration
+        if (feedingActive && feederTimer.seconds() < FEEDING_DURATION) {
+            rightFeeder.setPower(1);
+            leftFeeder.setPower(1);
+
+        // Stop feeder while left bumper is not pressed
+        } else {
+            rightFeeder.setPower(0);
+            leftFeeder.setPower(0);
+            feedingActive = false;
+
+        }
 
         // Toggle longShot
         if (gamepad1.x) {
