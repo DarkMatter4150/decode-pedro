@@ -78,14 +78,14 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
     // Constants
     // static final double SHOOTER_SPINUP_TIME = 0.75; // Seconds to reach full speed
 
-    private static final double TARGET_RPM = 3000; // Adjust to you shooter's speed
+    private static final double TARGET_RPM = 2750; // Adjust to you shooter's speed
     private static final double RPM_TOLERANCE = 100; // +- 100 RPM is acceptable
     static final double SHOOTER_LONG_POWER = 0.8; // Power for long shot
 
     // static final double SHOOTER_SHORT_POWER = 0.5; // Power for short shot (if needed)
 
     static final double FEEDER_POWER = 1.0; // Feeder motor power
-    private static final double FEEDING_DURATION = 0.2; // Desired feeding Duration (in seconds)
+    private static final double FEEDING_DURATION = 0.35; // Desired feeding Duration (in seconds)
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
 
@@ -112,26 +112,21 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         leftFeeder.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Configured shooter motor encoder
-        shooter.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
-        shooter.setMode(((DcMotor.RunMode.RUN_WITHOUT_ENCODER)));
+        shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Send telemetry message to signify robot waiting
         telemetry.addData("Status", " RPM Shooting - Initialized and Ready");
         telemetry.addData(">", "Press START to run");
         telemetry.update();
 
-
         // Wait for the game to start (driver presses START)
         waitForStart();
-
-        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
-
-        // ===== AUTONOMOUS SEQUENCE =====
 
         // Step 1: Drive forward for 3 seconds
 //        telemetry.addData("Status", "Step 1: Driving Forward");
@@ -152,10 +147,10 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 //        telemetry.addData("Status", "Step 2: Spinning Right");
 //        telemetry.update();
 //
-////        leftFrontDrive.setPower(-TURN_SPEED);
+//        leftFrontDrive.setPower(-TURN_SPEED);
 //        rightFrontDrive.setPower(TURN_SPEED);
 //        leftBackDrive.setPower(-TURN_SPEED);
-////        rightBackDrive.setPower(TURN_SPEED);
+//        rightBackDrive.setPower(TURN_SPEED);
 //
 //        runtime.reset();
 //        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
@@ -178,6 +173,11 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 //
 //        }
 
+        // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
+
+        // ===== AUTONOMOUS SEQUENCE =====
+
+
         // Step "1": STOP and prepare to shoot
         telemetry.addData("Status", "Step 1: Stopping for Shot");
         telemetry.update();
@@ -186,13 +186,6 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         sleep(250); // Brief pause to stabilize
 
 
-        // Previous STOP DRIVE WITHOUT Method
-//        leftFrontDrive.setPower(0);
-//        rightFrontDrive.setPower(0);
-//        leftBackDrive.setPower(0);
-//        rightBackDrive.setPower(0);
-
-//        sleep(250); // Brief pause to stabilize
 
         // Step "2": SHOOT (Long Shot Mode)
         telemetry.addData("Status", "Step 2: Say Hello to my LITTLE friend!");
@@ -204,28 +197,11 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
             telemetry.update();
 
             shooter.setPower(SHOOTER_LONG_POWER);  // Long shot power (same as teleop X button)
-            sleep(3500); // Short delay for initial acceleration before RPM calc
+            sleep(200); // Short delay for initial acceleration before RPM calc
             waitForTargetRPM();  // Wait for shooter to reach full speed (adjust as needed)
 
             // Feed artifact once RPM is stable
             feedArtifact(i);
-
-            // Previous Activate feeders WITHOUT Method
-//            rightFeeder.setPower(FEEDER_POWER);
-//            leftFeeder.setPower(FEEDER_POWER);
-//
-//            runtime.reset();
-//            while (opModeIsActive() && (runtime.seconds() < FEEDING_DURATION)) {
-//                telemetry.addData("Shot", i + " of 3");
-//                telemetry.addData("Feeding", "%.1f / %.1f seconds",
-//                        runtime.seconds(), FEEDING_DURATION);
-//                telemetry.update();
-//                sleep(100);
-//            }
-//
-//            // Stop feeders
-//            rightFeeder.setPower(0);
-//            leftFeeder.setPower(0);
 
             // Pause between shots
             sleep(1000);
@@ -239,29 +215,17 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         telemetry.update();
         sleep(500);
 
-//        // Previous Step 3: Drive forward for 0.5 seconds WITHOUT Method
-//        telemetry.addData("Status", "Step 6: Driving Forward");
-//        telemetry.update();
-//
-//        leftFrontDrive.setPower(DRIVE_SPEED);
-//        rightFrontDrive.setPower(DRIVE_SPEED);
-//        leftBackDrive.setPower(DRIVE_SPEED);
-//        rightBackDrive.setPower(DRIVE_SPEED);
-//
-//        runtime.reset();
-//        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-//            telemetry.addData("Path", "Leg 4: %4.1f S Elapsed", runtime.seconds());
-//            telemetry.update();
-//        }
 
-        // Drive forward
-        driveForward(0.5);
+
+        // Step "3": Drive forward for 1.0 seconds
+        driveForward(1.0);
 
         // Final Stop
         stopDrive();
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
+    }
 
 //
 //        // Step 7: Spin right for 1.3 seconds
@@ -294,7 +258,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 //
 //        }
 
-    }
+
 
     /**
      * Method to wait until shooter reaches target RPM before feeding
@@ -321,8 +285,8 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
                 break;
             }
 
-            // Safety timeout (max 3 seconds to reach speed)
-            if (rpmTimer.seconds() > 6.0) {
+            // Safety timeout (max 5 seconds to reach speed)
+            if (rpmTimer.seconds() > 5.0) {
                 telemetry.addData("Warning", "RPM timeout - feeding anyway");
                 telemetry.update();
                 break;
@@ -339,7 +303,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         // Get time elapsed since last calculation
         double timeElapsed = rpmTimer.seconds();
 
-        // Safegaurd against div-by-zero on first/short intervals
+        // Safeguard against div-by-zero on first/short intervals
         if (timeElapsed < MIN_TIME_ELAPSED) {
             rpmTimer.reset();  // Reset and wait longer next time
             return 0.0;
@@ -353,7 +317,6 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 
         // Calculate revolutions
         double revolutions = ticksTravel / (TICKS_PER_REVOLUTION * GEAR_RATIO);
-
         // Calculate RPM (revolutions per minute)
         double rpm = (revolutions / timeElapsed) * 60.0;
 
