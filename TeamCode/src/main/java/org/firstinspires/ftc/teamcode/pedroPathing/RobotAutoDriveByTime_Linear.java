@@ -78,9 +78,9 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
     // Constants
     // static final double SHOOTER_SPINUP_TIME = 0.75; // Seconds to reach full speed
 
-    private static final double TARGET_RPM = 2750; // Adjust to you shooter's speed
+    private static final double TARGET_RPM = 2000; // Adjust to you shooter's speed
     private static final double RPM_TOLERANCE = 100; // +- 100 RPM is acceptable
-    static final double SHOOTER_LONG_POWER = 0.8; // Power for long shot
+    static final double SHOOTER_LONG_POWER = 0.75; // Power for long shot
 
     // static final double SHOOTER_SHORT_POWER = 0.5; // Power for short shot (if needed)
 
@@ -112,7 +112,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         leftFeeder.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
@@ -192,12 +192,12 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         telemetry.update();
 
         // Shoot 3 artifacts with RPM monitoring
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 4; i++) {
             telemetry.addData("Status", "Shooting artifact " + i + " of 3");
             telemetry.update();
 
             shooter.setPower(SHOOTER_LONG_POWER);  // Long shot power (same as teleop X button)
-            sleep(200); // Short delay for initial acceleration before RPM calc
+            sleep(3500); // Short delay for initial acceleration before RPM calc
             waitForTargetRPM();  // Wait for shooter to reach full speed (adjust as needed)
 
             // Feed artifact once RPM is stable
