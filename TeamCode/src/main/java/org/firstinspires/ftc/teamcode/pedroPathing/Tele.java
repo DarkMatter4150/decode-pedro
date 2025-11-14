@@ -36,10 +36,10 @@ public class Tele extends OpMode {
         rightFeeder.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFeeder.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
     }
 /**/
@@ -47,8 +47,8 @@ public class Tele extends OpMode {
     public void loop() {
         rightFeeder.setPower(0);
         leftFeeder.setPower(0);
-        double axial   = -gamepad1.left_stick_y;
-        double lateral = gamepad1.left_stick_x;
+        double axial   = -gamepad1.left_stick_x; // X changed from lateral to axial
+        double lateral =  gamepad1.left_stick_y; // y changed from axial to lateral. FIXES: SPIN/ CORRECT DRIVING
         double yaw     = gamepad1.right_stick_x;
         boolean longShot = false;
         boolean feedingActive = false;
@@ -60,8 +60,10 @@ public class Tele extends OpMode {
         double leftBackPower   = axial - lateral + yaw;
         double rightBackPower  = axial + lateral - yaw;
 
-        double max = Math.max(Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower)),
-                Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
+        double max = Math.max(Math.abs(axial) + Math.abs(lateral) + Math.abs(yaw), 1);
+
+//        double max = Math.max(Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower)),
+//                Math.max(Math.abs(leftBackPower), Math.abs(rightBackPower)));
 
 
         if (max > 1.0) {
