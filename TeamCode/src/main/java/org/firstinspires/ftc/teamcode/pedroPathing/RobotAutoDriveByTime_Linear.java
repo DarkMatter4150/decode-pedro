@@ -85,7 +85,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
     // static final double SHOOTER_SHORT_POWER = 0.5; // Power for short shot (if needed)
 
     static final double FEEDER_POWER = 1.0; // Feeder motor power
-    private static final double FEEDING_DURATION = 0.35; // Desired feeding Duration (in seconds)
+    private static final double FEEDING_DURATION = 0.25; // Desired feeding Duration (in seconds)
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
 
@@ -113,7 +113,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Configured shooter motor encoder
